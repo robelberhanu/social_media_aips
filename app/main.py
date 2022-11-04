@@ -32,7 +32,7 @@ def find_post_index(id):
 async def root():
     return{"message":"Hello"}
 
-# get posts path
+#get posts path
 @app.get('/getposts')
 async def get_posts():
     return{"data":my_posts}
