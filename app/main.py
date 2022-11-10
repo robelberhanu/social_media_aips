@@ -5,6 +5,8 @@ from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel # used to define schema.
 from random import randrange
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 app = FastAPI()
 
@@ -13,6 +15,15 @@ class Post(BaseModel):
     content: str
     pulished: bool = True
     ratings: Optional[int] = None
+
+try:
+    conn = psycopg2.connect(host='localhost', database = 'socialmedia', user='postgres', password='roblion23', cursor_factory=RealDictCursor)
+    cursor = conn.cursor()
+    print("database connection was successful")
+except Exception as error:
+    print("connection failed")
+    print("error:", error)
+
 
 my_posts = [{"title": "title of post 1", "content":"content of post one", "id":1}, {"title": "favorite foods", "content":"I like pizza", "id":2}]
 
@@ -26,10 +37,6 @@ def find_post_index(id):
     for i, p in enumerate(my_posts):
         if p['id'] == id: 
             return i
-def find_post_index(id):
-    for i, p in enumerate(my_posts):
-        if p['id'] == id: 
-            return is
 
 # root path
 @app.get('/')
