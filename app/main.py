@@ -7,6 +7,7 @@ from pydantic import BaseModel # used to define schema.
 from random import randrange
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import time
 
 app = FastAPI()
 
@@ -16,13 +17,17 @@ class Post(BaseModel):
     pulished: bool = True
     ratings: Optional[int] = None
 
-try:
-    conn = psycopg2.connect(host='localhost', database = 'socialmedia', user='postgres', password='roblion23', cursor_factory=RealDictCursor)
-    cursor = conn.cursor()
-    print("database connection was successful")
-except Exception as error:
-    print("connection failed")
-    print("error:", error)
+# Connecting to a database
+while True:
+    try:
+        conn = psycopg2.connect(host='localhost', database = 'socialmedia', user='postgres', password='roblion23', cursor_factory=RealDictCursor)
+        cursor = conn.cursor()
+        print("database connection was successful")
+        break
+    except Exception as error:
+        print("connection failed")
+        print("error:", error)
+        time.sleep(2)
 
 
 my_posts = [{"title": "title of post 1", "content":"content of post one", "id":1}, {"title": "favorite foods", "content":"I like pizza", "id":2}]
@@ -46,7 +51,9 @@ async def root():
 #get posts path
 @app.get('/getposts')
 async def get_posts():
-    return{"data":my_posts}
+    cursor.execute("""SELECT * FROM posts""")
+    posts = cursor.fetchall()
+    return{"data":posts}
 
 # send posts to server
 
