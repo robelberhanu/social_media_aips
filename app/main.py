@@ -11,6 +11,7 @@ import time
 
 app = FastAPI()
 
+
 class Post(BaseModel):
     title: str
     content: str
@@ -56,7 +57,6 @@ async def get_posts():
     return{"data":posts}
 
 # send posts to server
-
 @app.post("/createposts", status_code = status.HTTP_201_CREATED)
 async def create_posts(post: Post):
      cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """, 
@@ -86,6 +86,7 @@ def delete_post(id: int):
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+# Update Posts
 @app.put("/updatepost/{id}")
 def update_post(id: int, post: Post):
     cursor.execute("""UPDATE posts SET title = %s, content = %s, published = %s  WHERE id = %s RETURNING *""", (post.title, post.content, post.published, (str(id))))
