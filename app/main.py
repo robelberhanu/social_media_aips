@@ -1,24 +1,28 @@
 from pyexpat import model
 import re
 from typing import Optional
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from pydantic import BaseModel # used to define schema.
 from random import randrange
+from sqlalchemy.orm import Session
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import time
+from . import models
+from .database import engine, SessionLocal, get_db
 
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
-
+# Base Model
 class Post(BaseModel):
     title: str
     content: str
     published: bool = True
     ratings: Optional[int] = None
 
-# Connecting to a database
+# Connecting to a database 
 while True:
     try:
         conn = psycopg2.connect(host='localhost', database = 'socialmedia', user='postgres', password='roblion23', cursor_factory=RealDictCursor)
@@ -48,6 +52,11 @@ def find_post_index(id):
 @app.get('/')
 async def root():
     return{"message":"Hello"}
+
+@app.get("/sqlalchemy")
+def test_posts(db: Session = Depends(get_db)):
+    return{"Status" : "ssuccessful"}
+
 
 #get posts path
 @app.get('/getposts')
