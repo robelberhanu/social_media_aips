@@ -94,14 +94,6 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     return new_user
 
-
-@app.post("/users", status_code = status.HTTP_201_CREATED, response_model=schemas.UserOut)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    new_user =  models.User(**user.dict())
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return new_user
+ 
 
 
