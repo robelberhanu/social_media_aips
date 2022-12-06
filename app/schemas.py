@@ -23,7 +23,6 @@ class Post(PostBase):
 
 
 class UserCreate(BaseModel):
-    id:int
     email: EmailStr
     password: str
 
