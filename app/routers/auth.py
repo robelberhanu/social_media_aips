@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from ..import database, schemas, models, utils
 
-router = APIRouter(tags='Authentication')
+router = APIRouter(tags=['Authentication'])
 
 @router.post('/login')
 def login(user_credentials: schemas.UserLogin, db: Session = Depends(database.get_db)):
@@ -18,7 +18,7 @@ def login(user_credentials: schemas.UserLogin, db: Session = Depends(database.ge
 
 
 
-    return{'token':'valid'}
+    return {'token':'valid'}
 
 
 
