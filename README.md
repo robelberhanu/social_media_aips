@@ -2,6 +2,9 @@
 
 # Backend clone  of social media app by using FastAPI
 
+
+![Alt Text](/images/crud.png)
+
 #### This API  has 4 routes
 
 ## 1) Post route
