@@ -33,7 +33,7 @@ async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), 
 
 # get single post
 @router.get("/{id}", response_model= schemas.Post)
-def get_post(id: int, db: Session = Depends(get_db)):
+def get_post(id: int, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
   
     post = db.query(models.Post).filter(models.Post.id == id).first() # will fine the first post with specified ID only. 
     if not post:
@@ -43,7 +43,7 @@ def get_post(id: int, db: Session = Depends(get_db)):
 
 # Delete post Endpoint
 @router.delete('/{id}', status_code = status.HTTP_204_NO_CONTENT)
-def delete_post(id: int, db: Session = Depends(get_db)):
+def delete_post(id: int, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
    
     post = db.query(models.Post).filter(models.Post.id == id)
     if post == None:
@@ -55,7 +55,7 @@ def delete_post(id: int, db: Session = Depends(get_db)):
 
 # Update Posts
 @router.put("/{id}", response_model=schemas.Post)
-def update_post(id: int, updated_post: schemas.PostCreate, db: Session = Depends(get_db)):
+def update_post(id: int, updated_post: schemas.PostCreate, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
     post_query = db.query(models.Post).filter(models.Post.id == id)
     post = post_query.first()
 
