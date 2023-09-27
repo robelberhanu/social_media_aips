@@ -12,7 +12,6 @@ from . import models, schemas, utils
 from .database import engine, SessionLocal, get_db
 from .routers import post, user, auth
 
-
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
